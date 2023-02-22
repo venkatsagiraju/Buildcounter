@@ -16,7 +16,7 @@ jobs:
           $next = $current + 1
 
           #Write the new value back to the text file
-          $next | Set-Content counter.txt
+          printf %s "$next" > counter.txt
 
           #Commit the changes
           git config --local user.email "venkat_sagiraju@trimble.com"
