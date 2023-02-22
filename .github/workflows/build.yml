@@ -1,0 +1,29 @@
+name: build increment
+on: push
+
+jobs:
+  increment-counter:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Increment counter
+        run: |
+          #Read the current value from the text file
+          $current = Get-Content counter.txt
+
+          #Increment the value
+          $next = $current + 1
+
+          #Write the new value back to the text file
+          $next | Set-Content counter.txt
+
+          #Commit the changes
+          git config --local user.email "venkat_sagiraju@trimble.com"
+          git config --local user.name "venkatsagiraju"
+          git add counter.txt
+          git commit -m "Increment counter to $next"
+
+          # Push the changes to the same branch
+          git push origin Init
+
