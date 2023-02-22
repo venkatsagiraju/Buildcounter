@@ -25,5 +25,5 @@ jobs:
           git commit -m "Increment counter to $next"
 
           # Push the changes to the same branch
-          git push origin Init
+          git push origin main
 
