@@ -41,11 +41,13 @@ jobs:
  
       - name: Commit and push build counter changes
         run: |
+          cd buildcounter
           git config user.name "venkatsagiraju"
           git config user.email "venkat_sagiraju@trimble.comcom"
           git add ${{ env.BUILD_COUNTER_FILE }}
           git commit -m "Increment build counter [skip ci]"
           git push
+          cd ..
          
       - name: Print Build counter
         run: |
