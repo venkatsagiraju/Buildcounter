@@ -1,53 +1,33 @@
-name: Downstream Workflow
+name: Increment Counter
 
 on:
   push:
-  
-  repository_dispatch:
-    types: [start-downstream-workflow]
-    name: Buildcounter
- 
-env:
-  BUILD_COUNTER_REPO: venkatsagiraju/Buildcounter
-  BUILD_COUNTER_BRANCH: main
-  BUILD_COUNTER_FILE: counter.txt
- 
+    branches:
+      - main
+
 jobs:
-  my_job:
+  increment-counter:
     runs-on: windows-latest
     steps:
- 
-      - name: Read build counter
-        id: read-counter
-        run: |
-          $filePath = "${{ env.BUILD_COUNTER_FILE }}"
-          $version = "2022.4.3"
-          if (Test-Path $filePath) {
-            $lastBuildCounter = Get-Content $filePath
-          } else {
-            $lastBuildCounter = 0
-          }
-          Write-Host "::set-output name=last_build_counter::$lastBuildCounter"
- 
-      - name: Increment build counter
-        id: increment-counter
-        run: |
-          $newBuildCounter = ${{ steps.read-counter.outputs.last_build_counter }} + 1 
-          $newVersion = "$($version).$newBuildCounter"
-          $filePath = "${{ env.BUILD_COUNTER_FILE }}"
-          Set-Content -Path $filePath -Value $newBuildCounter
-          Write-Host "::set-output name=new_version::$newVersion"
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
- 
-      - name: Commit and push build counter changes
+      - name: Increment counter
         run: |
-          git config user.name "venkatsagiraju"
-          git config user.email "venkat_sagiraju@trimble.comcom"
-          git add ${{ env.BUILD_COUNTER_FILE }}
-          git commit -m "Increment build counter [skip ci]"
-          git push
+          # Read the current value from the file
+          $current_value = Get-Content -Path counter.txt
+          # Increment the current value
+          $new_value = $current_value + 1
+          # Write the new value back to the file
+          Set-Content -Path counter.txt -Value $new_value
 
-         
-      - name: Print Build counter
+      - name: Configure Git
         run: |
-          echo "Build Counter: ${{ steps.increment-counter.outputs.new_version }}"
+          git config --global user.name "venkatsagiraju"
+          git config --global user.email "venkat_sagiraju@trimble.com"
+
+      - name: Commit changes
+        run: |
+          git add counter.txt
+          git commit -m "Increment counter"
+          git push origin main
