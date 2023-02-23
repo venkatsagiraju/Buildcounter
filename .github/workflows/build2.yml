@@ -8,7 +8,7 @@ on:
     name: Buildcounter
  
 env:
-  BUILD_COUNTER_REPO: venkatsagiraju/Buildcounter
+  BUILD_COUNTER_REPO: ${{ github.repository }}
   BUILD_COUNTER_BRANCH: main
   BUILD_COUNTER_FILE: counter.txt
  
@@ -16,16 +16,6 @@ jobs:
   my_job:
     runs-on: windows-latest
     steps:
- 
-      - name: Clone build counter repo
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ env.BUILD_COUNTER_REPO }}
-          ref: ${{ env.BUILD_COUNTER_BRANCH }}
-          path: build-counter
- 
-      - name: Checkout code
-        uses: actions/checkout@v2
  
       - name: Read build counter
         id: read-counter
@@ -47,24 +37,16 @@ jobs:
           $filePath = "${{ env.BUILD_COUNTER_FILE }}"
           Set-Content -Path $filePath -Value $newBuildCounter
           Write-Host "::set-output name=new_version::$newVersion"
- 
-      - name: Checkout build counter repo
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ env.BUILD_COUNTER_REPO }}
-          ref: ${{ env.BUILD_COUNTER_BRANCH }}
-          path: build-counter
+
  
       - name: Commit and push build counter changes
         run: |
-          cd build-counter
-          git config user.name "venkatsagiraju"
-          git config user.email "venkat_sagiraju@trimble.com"
-          git add .
+          git config user.name "vgiraju"
+          git config user.email "vt_scom"
+          git add ${{ env.BUILD_COUNTER_FILE }}
           git commit -m "Increment build counter [skip ci]"
           git push
-          cd ..
- 
+         
       - name: Print Build counter
         run: |
           echo "Build Counter: ${{ steps.increment-counter.outputs.new_version }}"
