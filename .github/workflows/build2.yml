@@ -9,7 +9,7 @@ on:
  
 env:
   BUILD_COUNTER_REPO: venkatsagiraju/Buildcounter
-  BUILD_COUNTER_BRANCH: Init
+  BUILD_COUNTER_BRANCH: main
   BUILD_COUNTER_FILE: counter.txt
  
 jobs:
