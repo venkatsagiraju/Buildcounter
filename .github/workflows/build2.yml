@@ -1,12 +1,10 @@
 name: Increment Counter
 
 on:
-  repository_dispatch:
-    types: [start-downstream-workflow]
-    name: Buildcounter
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   increment-counter:
