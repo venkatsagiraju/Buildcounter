@@ -42,7 +42,7 @@ jobs:
       - name: Increment build counter
         id: increment-counter
         run: |
-          $newBuildCounter = ${{ steps.read-counter.outputs.last_build_counter }} + 1
+          $newBuildCounter = ${{ steps.read-counter.outputs.last_build_counter }} + 1 
           $newVersion = "$($version).$newBuildCounter"
           $filePath = "${{ env.BUILD_COUNTER_FILE }}"
           Set-Content -Path $filePath -Value $newBuildCounter
